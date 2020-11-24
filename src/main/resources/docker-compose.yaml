@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  pwmanager-db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'pwmanager-db'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./sql-script/createDb.sql:/docker-entrypoint-initdb.d/createDb.sql
+    expose:
+      - '3306'
+volumes:
+  pwmanager-db:
