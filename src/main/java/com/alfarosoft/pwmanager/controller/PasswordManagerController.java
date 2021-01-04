@@ -32,8 +32,8 @@ public class PasswordManagerController {
     }
 
     @GetMapping(value = "/lookupUser/{username}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> lookupUser (@PathVariable String username){
-        return ResponseEntity.status(HttpStatus.OK).body(passwordManagerService.lookupUser(username));
+    public ResponseEntity<User> lookupUser (@PathVariable String username, @PathVariable String password){
+        return ResponseEntity.status(HttpStatus.OK).body(passwordManagerService.lookupUser(username, password));
     }
 
     @PostMapping(value = "/addApplication", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)

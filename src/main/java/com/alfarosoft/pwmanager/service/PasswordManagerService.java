@@ -30,8 +30,8 @@ public class PasswordManagerService {
         return user;
     }
 
-    public User lookupUser (String username){
-        return retrieveUserNameFromDatabase(username);
+    public User lookupUser (String username, String password){
+        return retrieveUserNameFromDatabase(username, password);
     }
 
     public Application addApplication (Application application){
@@ -54,18 +54,19 @@ public class PasswordManagerService {
         return applications;
     }
 
-    private User retrieveUserNameFromDatabase (String username){
+    private User retrieveUserNameFromDatabase (String username, String password){
         User userRetrieved;
         try{
             pwSession.beginTransaction();
-            Query selectQuery = pwSession.createQuery("from User WHERE USERNAME=:paramUsername");
+            Query selectQuery = pwSession.createQuery("from User WHERE USERNAME=:paramUsername and PASSWORD=:paramPassword");
             selectQuery.setParameter("paramUsername", username);
+            selectQuery.setParameter("paramPassword", password);
             userRetrieved = (User) selectQuery.uniqueResult();
             LOG.info("User retrieved", userRetrieved.toString());
             return userRetrieved;
         } catch (EntityNotFoundException e){
-            LOG.error("User not found with username: {}", username);
-            throw new PasswordManagerException("User with username " + username + " was not found", 404);
+            LOG.error("Incorrect user information retrieving username: {}", username);
+            throw new PasswordManagerException("User with username " + username + " was not found or user/password are incorrect", 404);
         }
     }
 
